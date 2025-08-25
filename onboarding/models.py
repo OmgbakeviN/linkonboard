@@ -31,3 +31,12 @@ class Submission(models.Model):
     extra = models.JSONField(default=dict, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
 
+class Submission(models.Model):
+    invite = models.OneToOneField(Invite, on_delete=models.CASCADE, related_name="submission")
+    full_name = models.CharField(max_length=180)
+    email = models.EmailField()
+    phone = models.CharField(max_length=32)
+    birth_date = models.DateField()
+    extra = models.JSONField(default=dict, blank=True)
+    created_user = models.ForeignKey(settings.AUTH_USER_MODEL, null=True, blank=True, on_delete=models.SET_NULL, related_name="created_from_submissions")
+    created_at = models.DateTimeField(auto_now_add=True)

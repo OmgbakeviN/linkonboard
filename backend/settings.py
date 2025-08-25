@@ -44,7 +44,8 @@ INSTALLED_APPS = [
     "rest_framework",
     "corsheaders",
     "accounts",
-    "onboarding"
+    "onboarding",
+    "posts",
 ]
 
 MIDDLEWARE = [
@@ -143,3 +144,14 @@ REST_FRAMEWORK = {
         "rest_framework.permissions.IsAuthenticated",
     ],
 }
+
+EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
+EMAIL_HOST = os.getenv("EMAIL_HOST", "smtp.gmail.com")        # Gmail: smtp.gmail.com | Mailjet: in-v3.mailjet.com
+EMAIL_PORT = int(os.getenv("EMAIL_PORT", "587"))              # 587 (TLS)
+EMAIL_HOST_USER = os.getenv("EMAIL_HOST_USER", "")            # ex: ton.email@gmail.com
+EMAIL_HOST_PASSWORD = os.getenv("EMAIL_HOST_PASSWORD", "")    # ex: App Password Gmail ou API key secrète Mailjet
+EMAIL_USE_TLS = True
+DEFAULT_FROM_EMAIL = os.getenv("DEFAULT_FROM_EMAIL", EMAIL_HOST_USER)
+
+# Email de notification du client (fallback si l'invite n'a pas created_by)
+NOTIFY_CLIENT_EMAIL = os.getenv("NOTIFY_CLIENT_EMAIL", "")

@@ -1,6 +1,5 @@
 import { useEffect, useState } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
-import axios from 'axios'
 
 export default function InviteFormPage() {
   const { token } = useParams()
@@ -15,14 +14,16 @@ export default function InviteFormPage() {
     let mounted = true
     async function fetchInvite() {
       try {
-        const res = await axios.get(`/api/invites/${token}/`)
+        const res = await fetch(`http://127.0.0.1:8000/api/invites/${token}/`)
         if (!mounted) return
-        if (res.data.status === "EXPIRED") {
+        if (!res.ok) throw new Error("HTTP " + res.status)
+        const data = await res.json()   // <— important
+        if (data.status === "EXPIRED") {
           setError("Lien expiré.")
         } else {
-          setInvite(res.data)
+          setInvite(data)
         }
-      } catch(e) {
+      } catch (e) {
         setError("Lien invalide.")
       } finally {
         setLoading(false)
@@ -41,10 +42,18 @@ export default function InviteFormPage() {
     setSubmitting(true)
     setError("")
     try {
-      await axios.post(`/api/invites/${token}/submit/`, form)
+      const res = await fetch(`http://127.0.0.1:8000/api/invites/${token}/submit/`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(form),
+      })
+      if (!res.ok) {
+        const maybe = await res.json().catch(()=>null)
+        throw new Error(maybe?.detail || "Erreur lors de l’envoi.")
+      }
       navigate(`/waiting/${token}`)
-    } catch(e) {
-      setError(e?.response?.data?.detail || "Erreur lors de l’envoi.")
+    } catch (e) {
+      setError(e.message || "Erreur lors de l’envoi.")
     } finally {
       setSubmitting(false)
     }
@@ -52,7 +61,7 @@ export default function InviteFormPage() {
 
   if (loading) return <div style={{ padding:24 }}>Chargement…</div>
   if (error) return <div style={{ padding:24, color:"crimson" }}>{error}</div>
-
+  
   return (
     <div style={{ maxWidth: 520, margin: "32px auto", padding: 24 }}>
       <h1>Formulaire d’invitation</h1>
