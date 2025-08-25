@@ -1,5 +1,5 @@
 from django.urls import path
-from .views import InviteCreateAPIView, InviteRetrieveAPIView, SubmissionCreateAPIView, SubmissionListAPIView, SubmissionApproveAPIView, SubmissionRejectAPIView
+from .views import InviteCreateAPIView, InviteRetrieveAPIView, SubmissionCreateAPIView, SubmissionListAPIView, SubmissionApproveAPIView, SubmissionRejectAPIView, AdminMembersWithFormAPIView
 
 urlpatterns = [
     path("invites/", InviteCreateAPIView.as_view(), name="invite-create"),
@@ -9,4 +9,5 @@ urlpatterns = [
     path("admin/submissions/", SubmissionListAPIView.as_view(), name="submission-list"),
     path("admin/submissions/<int:pk>/approve/", SubmissionApproveAPIView.as_view(), name="submission-approve"),
     path("admin/submissions/<int:pk>/reject/", SubmissionRejectAPIView.as_view(), name="submission-reject"),
+    path("admin/members-with-form/", AdminMembersWithFormAPIView.as_view(), name="admin-members-with-form"),
 ]

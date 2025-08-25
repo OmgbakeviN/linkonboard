@@ -10,8 +10,13 @@ class Post(models.Model):
     is_broadcast = models.BooleanField(default=False)
     # destinataires ciblés (plusieurs murs)
     recipients = models.ManyToManyField(settings.AUTH_USER_MODEL, related_name="posts_received", blank=True)
+    is_pinned = models.BooleanField(default=False)
     created_at = models.DateTimeField(auto_now_add=True)
     class Meta:
-        ordering = ["-created_at"]
+        ordering = ["-is_pinned", "-created_at"]  # pinned d’abord
 
-
+# model pour images
+class PostImage(models.Model):
+    post = models.ForeignKey(Post, on_delete=models.CASCADE, related_name="images")
+    image = models.ImageField(upload_to="post_images/")
+    uploaded_at = models.DateTimeField(auto_now_add=True)

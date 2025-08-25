@@ -37,6 +37,9 @@ export default function ClientDashboard() {
   return (
     <div style={{ maxWidth: 980, margin: "20px auto", padding: 24 }}>
       <h1>Dashboard — Demandes</h1>
+      <div>
+        <Link to="/my-posts">Voir mes posts</Link>
+      </div>
 
       <div style={{ display: "flex", gap: 8, alignItems: "center", margin: "12px 0" }}>
         <span>Filtrer :</span>

@@ -155,3 +155,7 @@ DEFAULT_FROM_EMAIL = os.getenv("DEFAULT_FROM_EMAIL", EMAIL_HOST_USER)
 
 # Email de notification du client (fallback si l'invite n'a pas created_by)
 NOTIFY_CLIENT_EMAIL = os.getenv("NOTIFY_CLIENT_EMAIL", "")
+FRONTEND_URL = os.getenv("FRONTEND_URL", "http://localhost:5173")
+
+MEDIA_URL = "/media/"
+MEDIA_ROOT = BASE_DIR / "media"

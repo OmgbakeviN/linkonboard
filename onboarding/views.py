@@ -12,7 +12,7 @@ from rest_framework.generics import ListAPIView
 from rest_framework.filters import OrderingFilter
 from rest_framework.pagination import PageNumberPagination
 from .models import Invite, Submission
-from .serializers import InviteCreateSerializer, InviteDetailSerializer, SubmissionCreateSerializer, SubmissionDetailSerializer, SubmissionListItemSerializer, DecisionResultSerializer
+from .serializers import InviteCreateSerializer, InviteDetailSerializer, SubmissionCreateSerializer, SubmissionDetailSerializer, SubmissionListItemSerializer, DecisionResultSerializer, MemberWithSubmissionSerializer
 from accounts.permissions import IsClient
 
 import secrets
@@ -233,3 +233,46 @@ class SubmissionRejectAPIView(APIView):
         }
         return Response(DecisionResultSerializer(data).data, status=200)
     
+class AdminMembersWithFormAPIView(ListAPIView):
+    permission_classes = [IsAuthenticated, IsClient]
+    serializer_class = MemberWithSubmissionSerializer
+
+    def get_queryset(self):
+        # on ne l'utilise pas (on override list), mais DRF le demande
+        return Submission.objects.none()
+
+    def list(self, request, *args, **kwargs):
+        subs = Submission.objects.select_related("invite", "created_user").all()
+        data = []
+        for s in subs:
+            u = s.created_user
+            if not u:  # si pas encore créé (PENDING)
+                data.append({
+                    "id": None,
+                    "username": "",
+                    "email": s.email,
+                    "role": "PENDING",
+                    "full_name": s.full_name,
+                    "phone": s.phone,
+                    "birth_date": s.birth_date,
+                    "submission_created_at": s.created_at,
+                    "invite_status": s.invite.status,
+                    "token": s.invite.token,
+                })
+            else:
+                data.append({
+                    "id": u.id,
+                    "username": u.username,
+                    "email": u.email,
+                    "role": u.role,
+                    "full_name": s.full_name,
+                    "phone": s.phone,
+                    "birth_date": s.birth_date,
+                    "submission_created_at": s.created_at,
+                    "invite_status": s.invite.status,
+                    "token": s.invite.token,
+                })
+        serializer = self.get_serializer(data, many=True)
+        return Response(serializer.data, status=200)
+
+

@@ -7,6 +7,7 @@ export default function ClientPostForm() {
   const [form, setForm] = useState({ title: "", body: "", is_broadcast: false });
   const [msg, setMsg] = useState("");
   const [err, setErr] = useState("");
+  const [files, setFiles] = useState([]);
 
   useEffect(() => {
     async function load() {
@@ -28,19 +29,17 @@ export default function ClientPostForm() {
     e.preventDefault();
     setMsg(""); setErr("");
     try {
-      const payload = {
-        title: form.title,
-        body: form.body,
-        is_broadcast: form.is_broadcast,
-        recipient_ids: form.is_broadcast ? [] : checked
-      };
-      await api.post("/posts/", payload);
+      const fd = new FormData();
+      fd.append("title", form.title);
+      fd.append("body", form.body);
+      fd.append("is_broadcast", String(form.is_broadcast));
+      if (!form.is_broadcast) checked.forEach(id => fd.append("recipient_ids", id));
+      files.forEach(f => fd.append("images", f));
+      await api.post("/posts/", fd, { headers: { "Content-Type":"multipart/form-data" } });
       setMsg("Message publié !");
       setForm({ title:"", body:"", is_broadcast:false });
-      setChecked([]);
-    } catch (e) {
-      setErr(e?.response?.data?.detail || "Échec de la publication.");
-    }
+      setChecked([]); setFiles([]);
+    } catch (e) { setErr(e?.response?.data?.detail || "Échec de la publication."); }
   }
 
   return (
@@ -48,6 +47,7 @@ export default function ClientPostForm() {
       <h1>Publier un message</h1>
 
       <form onSubmit={onSubmit} style={{ display:"grid", gap:12, marginBottom:16 }}>
+        <input type="file" multiple accept="image/*" onChange={(e)=>setFiles(Array.from(e.target.files))} />
         <input placeholder="Titre (facultatif)" value={form.title} onChange={e=>setForm({...form, title:e.target.value})} />
         <textarea placeholder="Contenu…" rows={6} value={form.body} onChange={e=>setForm({...form, body:e.target.value})} required />
         <label style={{ display:"flex", alignItems:"center", gap:8 }}>

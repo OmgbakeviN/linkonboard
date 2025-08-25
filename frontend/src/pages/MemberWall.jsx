@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import api from "../api"; // ton axios.create avec header Bearer
+import Linkified from "../components/Linkified";
 
 export default function MemberWall() {
   const [items, setItems] = useState([]);
@@ -26,7 +27,14 @@ export default function MemberWall() {
           {items.map(p => (
             <div key={p.id} style={{ padding:12, border:"1px solid #eee", borderRadius:8 }}>
               {p.title && <h3 style={{ margin:"0 0 8px" }}>{p.title}</h3>}
-              <p style={{ margin:0, whiteSpace:"pre-wrap" }}>{p.body}</p>
+              {p.images_out?.length ? (
+                <div style={{ display:"flex", gap:8, flexWrap:"wrap", marginTop:8 }}>
+                  {p.images_out.map(img => (
+                    <img key={img.id} src={img.image} alt="" style={{ maxWidth:200, borderRadius:8 }} />
+                  ))}
+                </div>
+              ) : null}
+              <Linkified text={p.body} />
               <div style={{ fontSize:12, opacity:.7, marginTop:8 }}>
                 De: {p.author_name} • {new Date(p.created_at).toLocaleString()}
                 {p.is_broadcast ? " • (Annonce à tous)" : ""}

@@ -1,5 +1,7 @@
 from rest_framework import serializers
 from .models import Invite, Submission
+from django.contrib.auth import get_user_model
+
 
 class InviteCreateSerializer(serializers.ModelSerializer):
     class Meta:
@@ -36,4 +38,16 @@ class DecisionResultSerializer(serializers.Serializer):
     submission_id = serializers.IntegerField()
     invite_status = serializers.CharField()
     created_username = serializers.CharField(allow_null=True)
+
+class MemberWithSubmissionSerializer(serializers.Serializer):
+    id = serializers.IntegerField()
+    username = serializers.CharField()
+    email = serializers.EmailField()
+    role = serializers.CharField()
+    full_name = serializers.CharField()
+    phone = serializers.CharField()
+    birth_date = serializers.DateField()
+    submission_created_at = serializers.DateTimeField()
+    invite_status = serializers.CharField()
+    token = serializers.CharField()
 

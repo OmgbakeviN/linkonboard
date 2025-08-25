@@ -10,6 +10,8 @@ import MemberWall from './pages/MemberWall.jsx'
 import ClientPostForm from './pages/ClientPostForm.jsx'
 import NewInvitePage from './pages/NewInvitePage.jsx'
 import ProtectedRoute from './components/ProtectedRoute.jsx'
+import ClientPostsPage from './pages/ClientPostsPage.jsx'
+import AdminMembersList from './pages/AdminMembersList.jsx'
 
 const router = createBrowserRouter([
   { path: '/', element: <App /> },
@@ -20,6 +22,8 @@ const router = createBrowserRouter([
   { path: "/new-invite", element: <NewInvitePage /> },
   { path: '/wall', element: <MemberWall /> },
   { path: '/post', element: <ClientPostForm /> },
+  { path: '/my-posts', element: <ClientPostsPage /> },
+  { path: '/admin/members', element: <AdminMembersList /> },
 ])
 
 ReactDOM.createRoot(document.getElementById('root')).render(
@@ -36,3 +40,4 @@ ReactDOM.createRoot(document.getElementById('root')).render(
 // { path: "/post", element: <ProtectedRoute allow="CLIENT"><ClientPostForm /></ProtectedRoute> },
 // { path: "/new-invite", element: <ProtectedRoute allow="CLIENT"><NewInvitePage /></ProtectedRoute> },
 // { path: "/wall", element: <ProtectedRoute allow="MEMBER"><MemberWall /></ProtectedRoute> },
+// { path: '/my-posts', element: <ProtectedRoute allow="CLIENT"><ClientPostsPage /></ProtectedRoute> },
