@@ -84,7 +84,6 @@ def notify_post_email(post, recipients):
     body = (
         f"Vous avez reçu un nouveau message de {post.author.username}.\n\n"
         f"Titre: {post.title or '(sans titre)'}\n"
-        f"Contenu:\n{post.body}\n\n"
         f"Connectez-vous pour le lire: {settings.FRONTEND_URL or 'http://localhost:5173'}/wall"
     )
     try:

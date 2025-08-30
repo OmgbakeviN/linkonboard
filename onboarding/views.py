@@ -146,7 +146,8 @@ def create_member_user_from_submission(sub: Submission) -> User:
                 f"Identifiant: {user.username}\n"
                 f"Email: {user.email}\n"
                 f"Mot de passe temporaire: {temp_password}\n\n"
-                f"Merci de vous connecter et de changer votre mot de passe."
+                f"Merci de vous connecter avec les identifiants fournis. cliquez sur le lien ci-dessous :"
+                f"{settings.FRONTEND_URL or 'http://localhost:5173'}/login"
             ),
         )
     # si l’utilisateur existait déjà, assure le rôle
