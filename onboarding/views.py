@@ -147,7 +147,7 @@ def create_member_user_from_submission(sub: Submission) -> User:
                 f"Email: {user.email}\n"
                 f"Mot de passe temporaire: {temp_password}\n\n"
                 f"Merci de vous connecter avec les identifiants fournis. cliquez sur le lien ci-dessous :"
-                f"{settings.FRONTEND_URL or 'http://localhost:5173'}/login"
+                f"https://frontend-linkonboard.vercel.app/login"
             ),
         )
     # si l’utilisateur existait déjà, assure le rôle

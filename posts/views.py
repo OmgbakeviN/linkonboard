@@ -84,7 +84,7 @@ def notify_post_email(post, recipients):
     body = (
         f"Vous avez reçu un nouveau message de {post.author.username}.\n\n"
         f"Titre: {post.title or '(sans titre)'}\n"
-        f"Connectez-vous pour le lire: {settings.FRONTEND_URL or 'http://localhost:5173'}/wall"
+        f"Connectez-vous pour le lire: https://frontend-linkonboard.vercel.app/wall"
     )
     try:
         send_mail(subject, body, settings.DEFAULT_FROM_EMAIL, emails, fail_silently=True)
